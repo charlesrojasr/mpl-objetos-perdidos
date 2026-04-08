@@ -195,11 +195,76 @@
 
         } else {
           $('#nombre_acta').val('');
-          $('#acta_actual').html('<p class="text-muted">No hay acta registrada</p>');
+          $('#acta_actual').html('');
         }
 
       }
     });
 
   }
+</script>
+
+<script>
+  function abrirActa(id) {
+
+    $('#acta_registro_id').val(id);
+
+    $('#modal_detalle').modal('hide');
+
+    $('#modal_detalle').one('hidden.bs.modal', function() {
+
+      $('#modal_acta_registro').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+
+    });
+  }
+
+  function abrirActaEditar(id) {
+
+    limpiarModalActa();
+
+    $('#modal_detalle').modal('hide');
+
+    $('#modal_detalle').one('hidden.bs.modal', function() {
+
+      $.post('listarobjetos_acta_row.php', {
+        id: id
+      }, function(data) {
+
+        let res = JSON.parse(data);
+
+        $('#acta_registro_id').val(id);
+        $('#nombre_acta').val(res.nombre_acta);
+
+        $('#acta_actual').html(`
+                <div class="alert alert-secondary">
+                    ${res.nombre_acta}<br>
+                    <a href="../dist/actas/${res.nombre_archivo}" target="_blank">
+                        Ver archivo actual
+                    </a>
+                </div>
+            `);
+
+        $('#modal_acta_registro').modal('show');
+
+      });
+
+    });
+  }
+
+  function limpiarModalActa() {
+    $('#nombre_acta').val('');
+    $('#archivo_acta').val('');
+    $('.custom-file-label').html('Seleccionar archivo...');
+    $('#acta_actual').html('');
+  }
+</script>
+
+<script>
+  $('.custom-file-input').on('change', function(e) {
+    var fileName = e.target.files[0].name;
+    $(this).next('.custom-file-label').html(fileName);
+  });
 </script>

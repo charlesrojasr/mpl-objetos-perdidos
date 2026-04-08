@@ -30,6 +30,7 @@
   <?php include '../00_includes/footer.php'; ?> 
 
   <?php include 'listarobjetos_modal_add.php'; ?>  
+  <?php include 'listarobjetos_modal_acta.php'; ?>  
   <?php include 'listarobjetos_modal_ver_detalle.php'; ?>  
   <?php include 'listarobjetos_modal_edit_photo.php'; ?>  
 

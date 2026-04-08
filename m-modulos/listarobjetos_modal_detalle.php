@@ -4,15 +4,20 @@ include 'listarobjetos_config.php';
 $id = $_POST['id'];
 
 // ================= REGISTRO + USUARIO =================
-$sql = "SELECT r.*, c.nombre_categoria,
-        up.nombre AS user_nombre,
-        up.apellido_paterno,
-        up.apellido_materno
-        FROM objetosperdidos_registros r
-        LEFT JOIN objetosperdidos_categorias c ON r.categoria_id = c.id
-        LEFT JOIN objetosperdidos_users u ON r.user_id = u.id
-        LEFT JOIN objetosperdidos_user_profile up ON u.id = up.user_id
-        WHERE r.id = '$id'";
+$sql = "SELECT 
+r.*,
+c.nombre_categoria,
+
+-- USUARIO (quien registra en el sistema)
+up.nombre AS user_nombre,
+up.apellido_paterno AS user_apellido_paterno,
+up.apellido_materno AS user_apellido_materno
+
+FROM objetosperdidos_registros r
+LEFT JOIN objetosperdidos_categorias c ON r.categoria_id = c.id
+LEFT JOIN objetosperdidos_users u ON r.user_id = u.id
+LEFT JOIN objetosperdidos_user_profile up ON u.id = up.user_id
+WHERE r.id = '$id'";
 
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
@@ -38,7 +43,9 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
             <div class="row">
                 <div class="col-md-6">
                     <p><b>DNI:</b> <?php echo $row['nro_documento']; ?></p>
-                    <p><b>Nombre:</b> <?php echo $row['nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']; ?></p>
+                    <p><b>Nombre:</b>
+                        <?php echo $row['nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']; ?>
+                    </p>
                     <p><b>Tipo:</b> <?php echo $row['tipo_persona']; ?></p>
                 </div>
 
@@ -54,7 +61,7 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
             <p><b>Estado:</b>
                 <?php
                 if ($row['estado'] == '1') echo "<span class='badge badge-warning'>REGISTRADO</span>";
-                elseif ($row['estado'] == '2') echo "<span class='badge badge-primary'>CON ACTA</span>";
+                elseif ($row['estado'] == '2') echo "<span class='badge badge-primary'>CON ACTA DE ENTREGA</span>";
                 elseif ($row['estado'] == '3') echo "<span class='badge badge-success'>ENTREGADO</span>";
                 elseif ($row['estado'] == '4') echo "<span class='badge badge-dark'>CERRADO</span>";
                 ?>
@@ -72,7 +79,7 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
             <div class="row">
                 <div class="col-md-6">
                     <p><b>Nombre completo:</b>
-                        <?php echo $row['user_nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']; ?>
+                        <?php echo $row['user_nombre'] . ' ' . $row['user_apellido_paterno'] . ' ' . $row['user_apellido_materno']; ?>
                     </p>
                 </div>
 
@@ -121,15 +128,16 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
                     <i class="fas fa-file"></i> Ver Acta
                 </a>
 
+                <button class="btn btn-warning btn-sm"
+                    onclick="abrirActaEditar(<?php echo $row['id']; ?>)">
+                    <i class="fas fa-edit"></i> Editar Acta
+                </button>
+
             <?php } else { ?>
 
-                <p class="text-muted">No hay acta de registro</p>
-
                 <button class="btn btn-dark btn-sm"
-                    data-toggle="modal"
-                    data-target="#modal_acta_registro"
-                    onclick="cargarActaRegistro(<?php echo $row['id']; ?>)">
-                    <i class="fas fa-file-upload"></i> Subir / Editar Acta
+                    onclick="abrirActa(<?php echo $row['id']; ?>)">
+                    <i class="fas fa-file-upload"></i> Subir Acta
                 </button>
 
             <?php } ?>

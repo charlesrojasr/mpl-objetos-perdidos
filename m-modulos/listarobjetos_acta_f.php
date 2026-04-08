@@ -6,7 +6,9 @@ $nombre_acta = strtoupper($_POST['nombre_acta']);
 
 $archivo = "";
 
-// SUBIR ARCHIVO
+// ================= VALIDAR ARCHIVO =================
+$permitidos = ['pdf', 'jpg', 'jpeg', 'png'];
+
 if (!empty($_FILES['archivo_acta']['name'])) {
 
     $carpeta = "../dist/actas/";
@@ -15,14 +17,33 @@ if (!empty($_FILES['archivo_acta']['name'])) {
         mkdir($carpeta, 0777, true);
     }
 
-    $archivo = time() . "_" . $_FILES['archivo_acta']['name'];
+    $nombre_original = $_FILES['archivo_acta']['name'];
+    $ext = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+
+    // Validar extensión
+    if (!in_array($ext, $permitidos)) {
+        die("<script>alert('Formato no permitido'); window.history.back();</script>");
+    }
+
+    // Nombre limpio
+    $archivo = time() . "_" . preg_replace('/[^A-Za-z0-9.\-]/', '_', $nombre_original);
+
     move_uploaded_file($_FILES['archivo_acta']['tmp_name'], $carpeta . $archivo);
 }
 
-// VERIFICAR SI YA EXISTE
+// ================= VERIFICAR EXISTENCIA =================
 $check = $conn->query("SELECT * FROM objetosperdidos_actas WHERE registro_id = '$registro_id'");
+$existe = $check->fetch_assoc();
 
-if ($check->num_rows > 0) {
+if ($existe) {
+
+    // 👉 ELIMINAR ARCHIVO ANTERIOR SI SUBE NUEVO
+    if ($archivo != "" && !empty($existe['nombre_archivo'])) {
+        $ruta_anterior = "../dist/actas/" . $existe['nombre_archivo'];
+        if (file_exists($ruta_anterior)) {
+            unlink($ruta_anterior);
+        }
+    }
 
     // UPDATE
     if ($archivo != "") {
@@ -42,15 +63,14 @@ if ($check->num_rows > 0) {
             VALUES ('$registro_id', '$nombre_acta', '$archivo')";
 }
 
-// EJECUTAR
+// ================= EJECUTAR =================
 if ($conn->query($sql)) {
 
-    // ACTUALIZAR ESTADO A 2
+    // ACTUALIZAR ESTADO
     $conn->query("UPDATE objetosperdidos_registros SET estado='2' WHERE id='$registro_id'");
 
     echo "<script>
-        alert('Acta guardada correctamente');
-        window.history.back();
+        window.location.href = 'listarobjetos.php?ok=1';
     </script>";
 
 } else {

@@ -40,7 +40,7 @@
           if ($estado == 'Registrado') {
             echo '<span class="badge badge-warning">Registrado</span>';
           } elseif ($estado == 'Con Acta') {
-            echo '<span class="badge badge-primary">Con Acta</span>';
+            echo '<span class="badge badge-primary">Con Acta de Registro</span>';
           } elseif ($estado == 'Entregado') {
             echo '<span class="badge badge-success">Entregado</span>';
           } elseif ($estado == 'Cerrado') {
@@ -54,18 +54,20 @@
         <!-- ACCIONES -->
         <td>
 
-          <!-- VER DETALLE (MODAL) -->
-          <a href="#modal_detalle" data-toggle="modal"
-            class="btn btn-info btn-sm"
-            onclick="verDetalle(<?php echo $row['id']; ?>)">
-            <i class="fas fa-eye"></i>
-          </a>
+
 
           <!-- EDITAR -->
           <a href="#edit" data-toggle="modal"
             class="btn btn-warning btn-sm"
             onclick="funcionEditar(<?php echo $row['id']; ?>)">
             <i class="fas fa-edit"></i>
+          </a>
+
+          <!-- VER DETALLE (MODAL) -->
+          <a href="#modal_detalle" data-toggle="modal"
+            class="btn btn-info btn-sm"
+            onclick="verDetalle(<?php echo $row['id']; ?>)">
+            <i class="fas fa-box-open"></i>
           </a>
 
           <!-- ENTREGA -->
