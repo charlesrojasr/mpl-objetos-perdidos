@@ -100,9 +100,17 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
 
                 <?php if ($fotos->num_rows > 0) { ?>
                     <?php while ($f = $fotos->fetch_assoc()) { ?>
-                        <div class="col-md-3 mb-2">
+                        <div class="col-md-3 mb-2 text-center">
                             <img src="../dist/fotos_objetos/<?php echo $f['nombre_archivo']; ?>"
-                                class="img-fluid" style="height:150px;object-fit:cover;">
+                                class="img-fluid mb-1" style="height:150px;object-fit:cover;">
+
+                            <br>
+
+                            <a href="../dist/fotos_objetos/<?php echo $f['nombre_archivo']; ?>"
+                                download
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i>
+                            </a>
                         </div>
                     <?php } ?>
                 <?php } else { ?>
