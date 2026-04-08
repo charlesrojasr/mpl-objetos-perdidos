@@ -1,0 +1,202 @@
+-- ============================================
+-- TABLA: ROLES
+-- ============================================
+CREATE TABLE objetosperdidos_roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role_name VARCHAR(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: USUARIOS
+-- ============================================
+CREATE TABLE objetosperdidos_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role_id INT,
+    estado VARCHAR(1) DEFAULT '1',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL,
+
+    FOREIGN KEY (role_id) REFERENCES objetosperdidos_roles(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TRIGGER: UPDATED_AT USERS
+-- ============================================
+CREATE TRIGGER trg_users_updated_at
+BEFORE UPDATE ON objetosperdidos_users
+FOR EACH ROW
+SET NEW.updated_at = NOW();
+
+
+-- ============================================
+-- TABLA: PERFIL DE USUARIO
+-- ============================================
+CREATE TABLE objetosperdidos_user_profile (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    nombre VARCHAR(100),
+    apellido_paterno VARCHAR(100),
+    apellido_materno VARCHAR(100),
+    documento_identidad VARCHAR(50),
+
+    FOREIGN KEY (user_id) REFERENCES objetosperdidos_users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: PERMISOS
+-- ============================================
+CREATE TABLE objetosperdidos_permissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    permission_name VARCHAR(100)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: RELACIÓN ROLES - PERMISOS
+-- ============================================
+CREATE TABLE objetosperdidos_role_permissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role_id INT,
+    permission_id INT,
+
+    FOREIGN KEY (role_id) REFERENCES objetosperdidos_roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES objetosperdidos_permissions(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: CATEGORÍAS
+-- ============================================
+CREATE TABLE objetosperdidos_categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_categoria VARCHAR(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: REGISTRO PRINCIPAL
+-- ============================================
+CREATE TABLE objetosperdidos_registros (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    nro_documento VARCHAR(50),
+    nombre VARCHAR(100),
+    apellido_paterno VARCHAR(100),
+    apellido_materno VARCHAR(100),
+    tipo_persona VARCHAR(50),
+
+    descripcion_objeto VARCHAR(255),
+    categoria_id INT,
+
+    lugar_referencia VARCHAR(255),
+
+    user_id INT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    estado VARCHAR(1) DEFAULT '1',
+
+    FOREIGN KEY (categoria_id) REFERENCES objetosperdidos_categorias(id),
+    FOREIGN KEY (user_id) REFERENCES objetosperdidos_users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: FOTOS DEL REGISTRO
+-- ============================================
+CREATE TABLE objetosperdidos_registro_fotos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    registro_id INT,
+    nombre_archivo VARCHAR(255),
+    fecha_subida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (registro_id) REFERENCES objetosperdidos_registros(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: ACTA DEL REGISTRO
+-- ============================================
+CREATE TABLE objetosperdidos_actas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registro_id INT UNIQUE,
+
+    nombre_acta VARCHAR(150),
+    nombre_archivo VARCHAR(255),
+
+    fecha_subida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (registro_id) REFERENCES objetosperdidos_registros(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: ENTREGA
+-- ============================================
+CREATE TABLE objetosperdidos_entregas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    registro_id INT,
+
+    nro_documento VARCHAR(50),
+    nombre VARCHAR(100),
+    apellido_paterno VARCHAR(100),
+    apellido_materno VARCHAR(100),
+
+    numero_contacto VARCHAR(50),
+    correo VARCHAR(150),
+    direccion VARCHAR(255),
+
+    user_id INT,
+    fecha_entrega TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (registro_id) REFERENCES objetosperdidos_registros(id),
+    FOREIGN KEY (user_id) REFERENCES objetosperdidos_users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: ARCHIVOS DE ENTREGA
+-- ============================================
+CREATE TABLE objetosperdidos_entrega_archivos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    entrega_id INT,
+    nombre_archivo VARCHAR(255),
+
+    fecha_subida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (entrega_id) REFERENCES objetosperdidos_entregas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- TABLA: ACTA DE ENTREGA
+-- ============================================
+CREATE TABLE objetosperdidos_entrega_actas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    entrega_id INT UNIQUE,
+
+    nombre_acta VARCHAR(150),
+    nombre_archivo VARCHAR(255),
+
+    fecha_subida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (entrega_id) REFERENCES objetosperdidos_entregas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+-- ============================================
+-- ÍNDICES
+-- ============================================
+CREATE INDEX idx_registro_user ON objetosperdidos_registros(user_id);
+CREATE INDEX idx_entrega_registro ON objetosperdidos_entregas(registro_id);
+CREATE INDEX idx_fotos_registro ON objetosperdidos_registro_fotos(registro_id);
+CREATE INDEX idx_archivos_entrega ON objetosperdidos_entrega_archivos(entrega_id);
