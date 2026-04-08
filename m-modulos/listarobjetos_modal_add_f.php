@@ -15,11 +15,26 @@ if (isset($_POST['add'])) {
     // =============================
     // DATOS
     // =============================
-    $nro_documento = limpiar($conn, $_POST['nro_documento']);
-    $nombre = limpiar($conn, $_POST['nombre']);
-    $apellido_paterno = limpiar($conn, $_POST['apellido_paterno']);
-    $apellido_materno = limpiar($conn, $_POST['apellido_materno']);
-    $tipo_persona = limpiar($conn, $_POST['tipo_persona']);
+    // =============================
+    // VALIDAR SI ES ANÓNIMO
+    // =============================
+    $es_anonimo = isset($_POST['anonimo']) ? 1 : 0;
+
+    if ($es_anonimo) {
+
+        $nro_documento = '00000000';
+        $nombre = 'ANÓNIMO';
+        $apellido_paterno = 'ANÓNIMO';
+        $apellido_materno = 'ANÓNIMO';
+        $tipo_persona = 'ANÓNIMO';
+    } else {
+
+        $nro_documento = limpiar($conn, $_POST['nro_documento']);
+        $nombre = limpiar($conn, $_POST['nombre']);
+        $apellido_paterno = limpiar($conn, $_POST['apellido_paterno']);
+        $apellido_materno = limpiar($conn, $_POST['apellido_materno']);
+        $tipo_persona = limpiar($conn, $_POST['tipo_persona']);
+    }
 
     $descripcion_objeto = limpiar($conn, $_POST['descripcion_objeto']);
     $categoria_id = $_POST['categoria_id'];
@@ -73,7 +88,6 @@ if (isset($_POST['add'])) {
             alert('Registro guardado correctamente');
             window.location.href='listarobjetos.php';
         </script>";
-
     } else {
 
         echo "<script>
@@ -81,8 +95,6 @@ if (isset($_POST['add'])) {
             window.location.href='listarobjetos.php';
         </script>";
     }
-
 } else {
     header('location: listarobjetos.php');
 }
-?>

@@ -28,28 +28,37 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="anonimo" value="1" class="custom-control-input" id="checkAnonimo">
+                                            <label class="custom-control-label" for="checkAnonimo">
+                                                Registro Anónimo
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label>Documento de Identidad</label>
-                                        <input type="text" name="nro_documento" class="form-control only-numbers" pattern="[0-9]+" inputmode="numeric" required>
+                                        <input type="text" name="nro_documento" class="form-control only-numbers datos-persona" pattern="[0-9]+" inputmode="numeric" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" name="nombre" class="form-control text-uppercase" required>
+                                        <input type="text" name="nombre" class="form-control text-uppercase datos-persona" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Apellido Paterno</label>
-                                        <input type="text" name="apellido_paterno" class="form-control text-uppercase" required>
+                                        <input type="text" name="apellido_paterno" class="form-control text-uppercase datos-persona" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Apellido Materno</label>
-                                        <input type="text" name="apellido_materno" class="form-control text-uppercase" required>
+                                        <input type="text" name="apellido_materno" class="form-control text-uppercase datos-persona" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Tipo de Persona</label>
-                                        <select name="tipo_persona" class="form-control text-uppercase" required>
+                                        <select name="tipo_persona" class="form-control text-uppercase datos-persona" required>
                                             <option value="">Seleccionar</option>
                                             <option value="CIUDADANO">CIUDADANO</option>
                                             <option value="SERENO">SERENO</option>

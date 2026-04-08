@@ -268,3 +268,35 @@
     $(this).next('.custom-file-label').html(fileName);
   });
 </script>
+
+
+<script>
+  // REGISTRO ANÓNIMO
+  $(document).on('change', '#checkAnonimo', function() {
+
+    if ($(this).is(':checked')) {
+
+      // Inputs
+      $('input.datos-persona').prop('readonly', true);
+      $('input.datos-persona').prop('required', false);
+      $('input.datos-persona').val('');
+
+      // Select
+      $('select.datos-persona').prop('disabled', true);
+      $('select.datos-persona').prop('required', false);
+      $('select.datos-persona').val('');
+
+    } else {
+
+      // Inputs
+      $('input.datos-persona').prop('readonly', false);
+      $('input.datos-persona').prop('required', true);
+
+      // Select
+      $('select.datos-persona').prop('disabled', false);
+      $('select.datos-persona').prop('required', true);
+
+    }
+
+  });
+</script>

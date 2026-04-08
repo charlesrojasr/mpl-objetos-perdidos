@@ -54,8 +54,6 @@
         <!-- ACCIONES -->
         <td>
 
-
-
           <!-- EDITAR -->
           <a href="#edit" data-toggle="modal"
             class="btn btn-warning btn-sm"
