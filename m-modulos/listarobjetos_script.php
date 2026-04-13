@@ -1,10 +1,48 @@
 <script>
   // ================= EDITAR =================
   function funcionEditar(id) {
-    $('#edit').modal('show');
-    getRow(id);
-  }
 
+    $.post('listarobjetos_row.php', {
+      id: id
+    }, function(res) {
+
+      let r = JSON.parse(res);
+
+      if (r.tipo_persona === 'ANÓNIMO') {
+
+        $('#checkAnonimo').prop('checked', true).trigger('change');
+
+      } else {
+
+        $('#checkAnonimo').prop('checked', false).trigger('change');
+
+      }
+
+      // SET ID
+      $('#registro_id').val(r.id);
+
+      // PERSONA
+      $('[name="nro_documento"]').val(r.nro_documento);
+      $('[name="nombre"]').val(r.nombre);
+      $('[name="apellido_paterno"]').val(r.apellido_paterno);
+      $('[name="apellido_materno"]').val(r.apellido_materno);
+      $('[name="tipo_persona"]').val(r.tipo_persona);
+
+      // OBJETO
+      $('[name="descripcion_objeto"]').val(r.descripcion_objeto);
+      $('[name="categoria_id"]').val(r.categoria_id);
+      $('[name="lugar_referencia"]').val(r.lugar_referencia);
+
+      // CAMBIAR TÍTULO
+      $('.modal-title').html('<i class="fas fa-edit"></i> Editar Registro');
+
+      // ABRIR MODAL
+      $('#addnew').modal('show');
+
+    });
+
+
+  }
   // ================= ENTREGA =================
   function funcionEntrega(id) {
     $('#modal_entrega').modal('show');
@@ -299,4 +337,30 @@
     }
 
   });
+</script>
+
+<script>
+  
+  function abrirNuevo() {
+
+    // RESET FORM
+    $('#formAdd')[0].reset();
+
+    // LIMPIAR ID (CLAVE)
+    $('#registro_id').val('');
+
+    // RESET CHECK ANÓNIMO
+    $('#checkAnonimo').prop('checked', false).trigger('change');
+
+    // LIMPIAR FOTOS
+    archivosSeleccionados = [];
+    $('#preview_fotos').html('');
+    $('.custom-file-label').html('Seleccionar archivos');
+
+    // TÍTULO
+    $('.modal-title').html('<i class="fas fa-box-open"></i> Nuevo Registro');
+
+    // ABRIR MODAL
+    $('#addnew').modal('show');
+  }
 </script>

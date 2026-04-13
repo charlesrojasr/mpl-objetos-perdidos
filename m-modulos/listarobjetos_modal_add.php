@@ -4,7 +4,7 @@
         <div class="modal-content">
 
             <form method="POST" action="listarobjetos_modal_add_f.php" enctype="multipart/form-data" id="formAdd">
-
+                <input type="hidden" name="registro_id" id="registro_id">
                 <!-- HEADER -->
                 <div class="modal-header bg-dark">
                     <h4 class="modal-title">
@@ -131,7 +131,7 @@
                         <i class="fas fa-times"></i> Cancelar
                     </button>
 
-                    <button type="submit" name="add" class="btn btn-success">
+                    <button type="submit" class="btn btn-success">
                         <i class="fas fa-save"></i> Guardar Registro
                     </button>
                 </div>

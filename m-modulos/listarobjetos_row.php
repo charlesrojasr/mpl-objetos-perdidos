@@ -1,17 +1,24 @@
 <?php
-	//include '../00_includes/session.php';
 include '../00_includes/conn.php';
 
-if(isset($_POST['id'])&&isset($_POST['tabla'])){
-	$tabla1= $_POST['tabla'];
-	$id = $_POST['id'];
-	
-		 //$sql = "SELECT *,".$tabla1.".id as empid FROM ".$tabla1."  WHERE ".$tabla1.".id = '$id'";
-		 $sql = "SELECT * FROM $tabla1  WHERE ".$tabla1.".id = '$id'";
-		 $query = $conn->query($sql);
-		 $row = $query->fetch_assoc();
+if (isset($_POST['id'])) {
 
+    $id = $_POST['id'];
 
-	echo json_encode($row);
+    $sql = "SELECT 
+        r.*,
+        c.nombre_categoria
+
+    FROM objetosperdidos_registros r
+
+    LEFT JOIN objetosperdidos_categorias c 
+        ON r.categoria_id = c.id
+
+    WHERE r.id = '$id'";
+
+    $query = $conn->query($sql);
+    $row = $query->fetch_assoc();
+
+    echo json_encode($row);
 }
 ?>

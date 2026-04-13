@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (isset($_POST['add'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     function limpiar($conn, $texto)
     {
@@ -45,16 +45,37 @@ if (isset($_POST['add'])) {
     // =============================
     // INSERT
     // =============================
-    $sql = "INSERT INTO objetosperdidos_registros 
+    $registro_id = $_POST['registro_id'] ?? '';
+
+    if ($registro_id == '') {
+
+        // ================= INSERT =================
+        $sql = "INSERT INTO objetosperdidos_registros 
     (nro_documento, nombre, apellido_paterno, apellido_materno, tipo_persona,
     descripcion_objeto, categoria_id, lugar_referencia, user_id, estado)
     VALUES 
     ('$nro_documento', '$nombre', '$apellido_paterno', '$apellido_materno', '$tipo_persona',
     '$descripcion_objeto', '$categoria_id', '$lugar_referencia', '$user_id', '1')";
+    } else {
+
+        // ================= UPDATE =================
+        $sql = "UPDATE objetosperdidos_registros SET
+        nro_documento='$nro_documento',
+        nombre='$nombre',
+        apellido_paterno='$apellido_paterno',
+        apellido_materno='$apellido_materno',
+        tipo_persona='$tipo_persona',
+        descripcion_objeto='$descripcion_objeto',
+        categoria_id='$categoria_id',
+        lugar_referencia='$lugar_referencia'
+    WHERE id='$registro_id'";
+    }
 
     if ($conn->query($sql)) {
 
-        $registro_id = $conn->insert_id;
+        if ($registro_id == '') {
+            $registro_id = $conn->insert_id;
+        }
 
         // =============================
         // GUARDAR FOTOS

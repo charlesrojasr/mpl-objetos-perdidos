@@ -11,7 +11,8 @@
            </div>
          </div>
          <div class="col-sm-6">
-           <button type="button" data-toggle="modal" data-target="#addnew"
+           <button type="button"
+             onclick="abrirNuevo()"
              style="margin-left: 30px;"
              class="btn btn-dark btn-sm">
              <i class="fas fa-plus"></i> AÑADIR NUEVO REGISTRO
