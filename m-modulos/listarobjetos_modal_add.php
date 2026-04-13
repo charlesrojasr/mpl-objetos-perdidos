@@ -113,7 +113,15 @@
                                         <small class="text-muted">Puedes subir varias imágenes</small>
 
                                         <!-- PREVIEW -->
-                                        <div id="preview_fotos" class="row mt-2"></div>
+                                        <div class="mt-2">
+                                            <label><b>Fotos actuales</b></label>
+                                            <div id="preview_existentes" class="row"></div>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <label><b>Nuevas fotos</b></label>
+                                            <div id="preview_nuevas" class="row"></div>
+                                        </div>
 
                                     </div>
 

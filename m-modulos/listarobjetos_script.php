@@ -2,45 +2,79 @@
   // ================= EDITAR =================
   function funcionEditar(id) {
 
+    // LIMPIAR ESTADO PREVIO (IMPORTANTE)
+    archivosSeleccionados = [];
+    $('#preview_fotos').html('');
+    $('.custom-file-label').html('Seleccionar archivos');
+
     $.post('listarobjetos_row.php', {
       id: id
     }, function(res) {
 
       let r = JSON.parse(res);
 
-      if (r.tipo_persona === 'ANÓNIMO') {
+      console.log(r); // DEBUG
 
-        $('#checkAnonimo').prop('checked', true).trigger('change');
-
-      } else {
-
-        $('#checkAnonimo').prop('checked', false).trigger('change');
-
-      }
-
-      // SET ID
+      // ================= ID =================
       $('#registro_id').val(r.id);
 
-      // PERSONA
+      // ================= ANÓNIMO =================
+      if (r.tipo_persona === 'ANÓNIMO') {
+        $('#checkAnonimo').prop('checked', true).trigger('change');
+      } else {
+        $('#checkAnonimo').prop('checked', false).trigger('change');
+      }
+
+      // ================= PERSONA =================
       $('[name="nro_documento"]').val(r.nro_documento);
       $('[name="nombre"]').val(r.nombre);
       $('[name="apellido_paterno"]').val(r.apellido_paterno);
       $('[name="apellido_materno"]').val(r.apellido_materno);
       $('[name="tipo_persona"]').val(r.tipo_persona);
 
-      // OBJETO
+      // ================= OBJETO =================
       $('[name="descripcion_objeto"]').val(r.descripcion_objeto);
       $('[name="categoria_id"]').val(r.categoria_id);
       $('[name="lugar_referencia"]').val(r.lugar_referencia);
 
-      // CAMBIAR TÍTULO
+      // ================= FOTOS EXISTENTES =================
+      $.post('listarobjetos_fotos_row.php', {
+        id: id
+      }, function(resFotos) {
+
+        let fotos = JSON.parse(resFotos);
+
+        let html = '';
+
+        fotos.forEach(f => {
+
+          html += `
+                <div class="col-md-3 mb-2" id="foto_${f.id}">
+                    <div class="card">
+                        <img src="../dist/fotos_objetos/${f.nombre_archivo}" 
+                             class="img-fluid" style="height:150px; object-fit:cover;">
+                        <div class="card-body p-2 text-center">
+                            <button type="button" 
+                                class="btn btn-danger btn-sm"
+                                onclick="eliminarFotoBD(${f.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+        });
+
+        $('#preview_existentes').html(html);
+
+      });
+
+      // ================= TÍTULO =================
       $('.modal-title').html('<i class="fas fa-edit"></i> Editar Registro');
 
-      // ABRIR MODAL
+      // ================= ABRIR MODAL =================
       $('#addnew').modal('show');
 
     });
-
 
   }
   // ================= ENTREGA =================
@@ -147,7 +181,7 @@
   // RENDER PREVIEW
   function renderPreview() {
 
-    let contenedor = $("#preview_fotos");
+    let contenedor = $("#preview_nuevas");
     contenedor.html("");
 
     archivosSeleccionados.forEach((file, index) => {
@@ -340,7 +374,6 @@
 </script>
 
 <script>
-  
   function abrirNuevo() {
 
     // RESET FORM
@@ -362,5 +395,24 @@
 
     // ABRIR MODAL
     $('#addnew').modal('show');
+
+    $('#preview_existentes').html('');
+    $('#preview_nuevas').html('');
+  }
+</script>
+
+<script>
+  function eliminarFotoBD(id) {
+
+    if (!confirm('¿Eliminar esta foto?')) return;
+
+    $.post('listarobjetos_foto_delete.php', {
+      id: id
+    }, function() {
+
+      $('#foto_' + id).remove();
+
+    });
+
   }
 </script>
