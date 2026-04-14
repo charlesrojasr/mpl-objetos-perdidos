@@ -416,3 +416,142 @@
 
   }
 </script>
+
+
+<script>
+  // ================= ARCHIVOS ENTREGA =================
+  let archivosEntrega = [];
+
+  // CUANDO SELECCIONA ARCHIVOS
+  $(document).on('change', '#archivos_entrega', function(e) {
+
+    let files = Array.from(e.target.files);
+
+    archivosEntrega = archivosEntrega.concat(files);
+
+    renderPreviewEntrega();
+
+    // actualizar label
+    let label = $(this).siblings('.custom-file-label');
+    label.html(archivosEntrega.length + " archivos seleccionados");
+
+    // reset input
+    $(this).val('');
+  });
+
+
+  // RENDER PREVIEW ENTREGA
+  function renderPreviewEntrega() {
+
+    let contenedor = $("#preview_archivos_entrega");
+    contenedor.html("");
+
+    archivosEntrega.forEach((file, index) => {
+
+      let reader = new FileReader();
+
+      reader.onload = function(e) {
+
+        let html = '';
+
+        // IMAGEN
+        if (file.type.startsWith('image/')) {
+
+          html = `
+                <div class="col-md-3 mb-2">
+                    <div class="card">
+                        <img src="${e.target.result}" class="img-fluid" style="height:150px; object-fit:cover;">
+                        <div class="card-body p-2 text-center">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarArchivoEntrega(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+
+        } else {
+
+          // PDF / OTROS
+          html = `
+                <div class="col-md-3 mb-2">
+                    <div class="card text-center p-3">
+                        <i class="fas fa-file fa-2x text-secondary"></i>
+                        <small class="mt-2">${file.name}</small>
+                        <button class="btn btn-danger btn-sm mt-2" onclick="eliminarArchivoEntrega(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        contenedor.append(html);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  // ELIMINAR ARCHIVO ENTREGA
+  function eliminarArchivoEntrega(index) {
+    archivosEntrega.splice(index, 1);
+    renderPreviewEntrega();
+
+    $('.custom-file-label').html(archivosEntrega.length + " archivos seleccionados");
+  }
+
+
+  // ANTES DE ENVIAR FORM ENTREGA
+  $('#modal_entrega form').on('submit', function() {
+
+    let input = document.getElementById('archivos_entrega');
+
+    let dataTransfer = new DataTransfer();
+
+    archivosEntrega.forEach(file => {
+      dataTransfer.items.add(file);
+    });
+
+    input.files = dataTransfer.files;
+
+  });
+
+
+  // LIMPIAR AL CERRAR MODAL
+  $('#modal_entrega').on('hidden.bs.modal', function() {
+
+    archivosEntrega = [];
+    $('#preview_archivos_entrega').html('');
+    $('#archivos_entrega').val('');
+    $('.custom-file-label').html('Seleccionar archivos...');
+
+  });
+</script>
+
+<script>
+  $('#modal_entrega').on('hidden.bs.modal', function() {
+
+    // 1. RESET FORM COMPLETO
+    $(this).find('form')[0].reset();
+
+    // 2. LIMPIAR INPUT FILE
+    $('#archivos_entrega').val('');
+
+    // 3. LIMPIAR PREVIEW
+    $('#preview_archivos_entrega').html('');
+
+    // 4. LIMPIAR ARRAY DE ARCHIVOS
+    archivosEntrega = [];
+
+    // 5. RESET LABEL FILE
+    $('#archivos_entrega').next('.custom-file-label').html('Seleccionar archivos...');
+
+    // 6. LIMPIAR ID OCULTO (IMPORTANTE)
+    $('#entrega_registro_id').val('');
+
+    $('#modal_entrega').on('show.bs.modal', function() {
+      $('#preview_archivos_entrega').html('');
+    });
+
+  });
+</script>

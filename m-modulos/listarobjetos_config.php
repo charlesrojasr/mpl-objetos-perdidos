@@ -12,69 +12,6 @@ $appModulo = 'LISTA DE OBJETOS PERDIDOS';
 // ============================================
 // CAMPOS BD
 // ============================================
-$titulocampobd1 = 'id';
-$titulocampobd2 = 'descripcion_objeto';
-$titulocampobd3 = 'nombre_categoria';
-$titulocampobd4 = 'lugar_referencia';
-
-$titulocampobd5 = 'fecha_registro';
-$titulocampobd6 = 'usuario_registro';
-
-$titulocampobd7 = 'persona_registro';
-$titulocampobd8 = 'tipo_persona';
-
-$titulocampobd9 = 'acta_recepcion';
-$titulocampobd10 = 'fecha_acta_recepcion';
-
-$titulocampobd11 = 'persona_entrega';
-$titulocampobd12 = 'fecha_entrega';
-$titulocampobd13 = 'usuario_entrega';
-
-$titulocampobd14 = 'correo_entrega';
-$titulocampobd15 = 'telefono_entrega';
-
-$titulocampobd16 = 'acta_entrega';
-$titulocampobd17 = 'fecha_acta_entrega';
-
-$titulocampobd18 = 'fotos_registro';
-$titulocampobd19 = 'archivos_entrega';
-
-$titulocampobd20 = 'estado_texto';
-
-
-// ============================================
-// TITULOS PARA EXPORTACION
-// ============================================
-$titulocampobd1P = 'ID';
-$titulocampobd2P = 'Objeto';
-$titulocampobd3P = 'Categoría';
-$titulocampobd4P = 'Lugar';
-
-$titulocampobd5P = 'Fecha Registro';
-$titulocampobd6P = 'Usuario Registro';
-
-$titulocampobd7P = 'Persona Registro';
-$titulocampobd8P = 'Tipo Persona';
-
-$titulocampobd9P = 'Acta Recepción';
-$titulocampobd10P = 'Fecha Acta Recepción';
-
-$titulocampobd11P = 'Persona Entrega';
-$titulocampobd12P = 'Fecha Entrega';
-$titulocampobd13P = 'Usuario Entrega';
-
-$titulocampobd14P = 'Correo Entrega';
-$titulocampobd15P = 'Teléfono Entrega';
-
-$titulocampobd16P = 'Acta Entrega';
-$titulocampobd17P = 'Fecha Acta Entrega';
-
-$titulocampobd18P = 'Fotos Registro';
-$titulocampobd19P = 'Archivos Entrega';
-
-$titulocampobd20P = 'Estado';
-
-
 // ============================================
 // MODULOS
 // ============================================
@@ -102,12 +39,13 @@ $sql = "SELECT
     a.fecha_subida AS fecha_acta_recepcion,
 
     CONCAT(e.nombre, ' ', e.apellido_paterno, ' ', e.apellido_materno) AS persona_entrega,
-    e.fecha_entrega,
-    ue.username AS usuario_entrega,
-
+	e.nro_documento AS nrodocumento_entrega,
     e.correo AS correo_entrega,
     e.numero_contacto AS telefono_entrega,
+    e.direccion AS direccion_entrega,
 
+    e.fecha_entrega,
+    ue.username AS usuario_entrega,
     ae.nombre_acta AS acta_entrega,
     ae.fecha_subida AS fecha_acta_entrega,
 
