@@ -33,7 +33,9 @@
   <?php include 'listarobjetos_modal_acta.php'; ?>  
   <?php include 'listarobjetos_modal_ver_detalle.php'; ?>  
   <?php include 'listarobjetos_modal_edit_photo.php'; ?>  
-  <?php include 'listarobjetos_modal_entrega.php'; ?>  
+  <?php include 'listarobjetos_modal_entrega.php'; ?>   ?>  
+  <?php include 'listarobjetos_modal_ver_entrega.php'; ?>
+  <?php include 'listarobjetos_modal_acta_entrega.php'; ?>
 
   <?php include '../00_includes/script.php'; ?>
   <?php include 'listarobjetos_script.php'; ?>

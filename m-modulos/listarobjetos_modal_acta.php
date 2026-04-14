@@ -65,7 +65,7 @@
             </div>
 
             <!-- ACTA ACTUAL -->
-            <div id="acta_actual" class="mt-3"></div>
+            <div id="preview_acta_actual" class="mt-3"></div>
 
           </div>
 

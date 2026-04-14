@@ -55,7 +55,6 @@ if ($existe) {
                 SET nombre_acta='$nombre_acta'
                 WHERE registro_id='$registro_id'";
     }
-
 } else {
 
     // INSERT
@@ -67,12 +66,13 @@ if ($existe) {
 if ($conn->query($sql)) {
 
     // ACTUALIZAR ESTADO
-    $conn->query("UPDATE objetosperdidos_registros SET estado='2' WHERE id='$registro_id'");
+    $conn->query("UPDATE objetosperdidos_registros 
+              SET estado = '2' 
+              WHERE id = '$registro_id' AND estado = '1'");
 
     echo "<script>
         window.location.href = 'listarobjetos.php?ok=1';
     </script>";
-
 } else {
 
     echo "<script>
@@ -80,4 +80,3 @@ if ($conn->query($sql)) {
         window.history.back();
     </script>";
 }
-?>

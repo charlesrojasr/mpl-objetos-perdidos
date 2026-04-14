@@ -79,8 +79,12 @@
   }
   // ================= ENTREGA =================
   function funcionEntrega(id) {
+
+    console.log("ID ENTREGA:", id); // DEBUG
+
+    $('#entrega_registro_id').val(id);
+
     $('#modal_entrega').modal('show');
-    getRow(id);
   }
 
   // ================= DETALLE =================
@@ -238,43 +242,7 @@
   });
 </script>
 
-<script>
-  function cargarActaRegistro(id) {
 
-    $('#acta_registro_id').val(id);
-
-    $.ajax({
-      url: "listarobjetos_acta_row.php",
-      type: "POST",
-      data: {
-        id: id
-      },
-      dataType: "json",
-      success: function(res) {
-
-        if (res) {
-          $('#nombre_acta').val(res.nombre_acta);
-
-          if (res.nombre_archivo) {
-            $('#acta_actual').html(`
-            <a href="../dist/actas/${res.nombre_archivo}" target="_blank" class="btn btn-info btn-sm">
-              <i class="fas fa-eye"></i> Ver Acta Actual
-            </a>
-          `);
-          } else {
-            $('#acta_actual').html('<p class="text-muted">No hay archivo</p>');
-          }
-
-        } else {
-          $('#nombre_acta').val('');
-          $('#acta_actual').html('');
-        }
-
-      }
-    });
-
-  }
-</script>
 
 <script>
   function abrirActa(id) {
@@ -295,42 +263,51 @@
 
   function abrirActaEditar(id) {
 
-    limpiarModalActa();
-
+    // 🔥 CERRAR MODAL DETALLE
     $('#modal_detalle').modal('hide');
 
-    $('#modal_detalle').one('hidden.bs.modal', function() {
+    // LIMPIAR
+    $('#acta_registro_id').val('');
+    $('#nombre_acta').val('');
+    $('#archivo_acta').val('');
+    $('#preview_acta_actual').html('');
+    $('.custom-file-label').text('Seleccionar archivo...');
 
-      $.post('listarobjetos_acta_row.php', {
-        id: id
-      }, function(data) {
+    // SET ID
+    $('#acta_registro_id').val(id);
 
-        let res = JSON.parse(data);
+    $.post('listarobjetos_acta_row.php', {
+      id: id
+    }, function(res) {
 
-        $('#acta_registro_id').val(id);
-        $('#nombre_acta').val(res.nombre_acta);
+      let r = JSON.parse(res);
 
-        $('#acta_actual').html(`
-                <div class="alert alert-secondary">
-                    ${res.nombre_acta}<br>
-                    <a href="../dist/actas/${res.nombre_archivo}" target="_blank">
-                        Ver archivo actual
-                    </a>
-                </div>
-            `);
+      if (r && r.nombre_archivo) {
 
+        $('#nombre_acta').val(r.nombre_acta);
+
+        $('#preview_acta_actual').html(`
+        <iframe src="../dist/actas/${r.nombre_archivo}" 
+                width="100%" height="300"></iframe>
+      `);
+
+      }
+
+      // 🔥 abrir DESPUÉS de cerrar el otro
+      setTimeout(() => {
         $('#modal_acta_registro').modal('show');
-
-      });
+      }, 400);
 
     });
+
   }
+
 
   function limpiarModalActa() {
     $('#nombre_acta').val('');
     $('#archivo_acta').val('');
     $('.custom-file-label').html('Seleccionar archivo...');
-    $('#acta_actual').html('');
+    $('#preview_acta_actual').html('');
   }
 </script>
 
@@ -553,5 +530,134 @@
       $('#preview_archivos_entrega').html('');
     });
 
+  });
+</script>
+
+<script>
+  function verEntrega(id) {
+
+    // 🔥 CERRAR TODOS LOS MODALES
+    $('.modal').modal('hide');
+
+    setTimeout(() => {
+
+      // 🔥 ABRIR MODAL CORRECTO
+      $('#modal_ver_entrega').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      // LOADING
+      $('#contenido_entrega').html(`
+      <center>
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando...</p>
+      </center>
+    `);
+
+      // AJAX
+      $.post('listarobjetos_entrega_detalle.php', {
+        id: id
+      }, function(res) {
+        $('#contenido_entrega').html(res);
+      });
+
+    }, 300);
+  }
+</script>
+
+<script>
+  function validarEntrega(id, estado) {
+
+    if (estado == 2) {
+      // ✔ permitido
+      funcionEntrega(id);
+
+    } else if (estado == 1) {
+      // ❌ bloquear
+      alert("Adjuntar el Acta de Registro");
+
+      // opcional: toastr bonito
+      // toastr.warning("Adjuntar el Acta de Registro");
+
+    } else {
+      // fallback
+      alert("No se puede realizar esta acción");
+    }
+  }
+</script>
+
+<script>
+  $(document).on('change', '#input_acta_entrega', function() {
+
+    let file = this.files[0];
+
+    if (!file) return;
+
+    let url = URL.createObjectURL(file);
+
+    $('#preview_acta_entrega').html(`
+    <iframe src="${url}" width="100%" height="300"></iframe>
+  `);
+  });
+
+  function editarActaEntrega(id, nombre) {
+
+    $('#nombre_acta_entrega').val(nombre);
+
+    $('html, body').animate({
+      scrollTop: $("#nombre_acta_entrega").offset().top - 100
+    }, 300);
+
+  }
+</script>
+
+<script>
+  function abrirModalActaEntrega(entrega_id) {
+
+    // LIMPIAR TODO
+    $('#acta_entrega_id').val('');
+    $('#acta_nombre').val('');
+    $('#input_acta_entrega_modal').val('');
+    $('#preview_acta_modal').html('');
+
+    $('#acta_entrega_id').val(entrega_id);
+
+    $.post('listarobjetos_entrega_acta_row.php', {
+      entrega_id
+    }, function(res) {
+
+      let r = JSON.parse(res);
+
+      if (r && r.nombre_archivo) {
+
+        $('#acta_nombre').val(r.nombre_acta);
+
+        // 🔥 MISMO CONTENEDOR SIEMPRE
+        $('#preview_acta_modal').html(`
+        <iframe src="../dist/actas_entrega/${r.nombre_archivo}" 
+                width="100%" height="300"></iframe>
+      `);
+
+      }
+
+      $('#modal_acta_entrega').modal('show');
+
+    });
+
+  }
+</script>
+<script>
+  $(document).on('change', '#input_acta_entrega_modal', function() {
+
+    let file = this.files[0];
+
+    if (!file) return;
+
+    let url = URL.createObjectURL(file);
+
+    $('#preview_acta_modal').html(`
+    <iframe src="${url}" width="100%" height="300"></iframe>
+  `);
   });
 </script>

@@ -55,26 +55,32 @@
         <td>
 
           <!-- EDITAR -->
-          <a href="#edit" data-toggle="modal"
-            class="btn btn-warning btn-sm"
+          <a href="#" class="btn btn-warning btn-sm"
             onclick="funcionEditar(<?php echo $row['id']; ?>)">
             <i class="fas fa-edit"></i>
           </a>
 
-          <!-- VER DETALLE (MODAL) -->
-          <a href="#modal_detalle" data-toggle="modal"
-            class="btn btn-info btn-sm"
+          <!-- DETALLE REGISTRO -->
+          <a href="#" class="btn btn-info btn-sm"
             onclick="verDetalle(<?php echo $row['id']; ?>)">
             <i class="fas fa-box-open"></i>
           </a>
 
-          <!-- ENTREGA -->
           <?php if ($row['estado_texto'] != 'Entregado' && $row['estado_texto'] != 'Cerrado') { ?>
-            <a href="#modal_entrega" data-toggle="modal"
-              class="btn btn-success btn-sm"
-              onclick="funcionEntrega(<?php echo $row['id']; ?>)">
+
+            <a href="#" class="btn btn-success btn-sm"
+              onclick="validarEntrega(<?php echo $row['id']; ?>, <?php echo $row['estado']; ?>)">
               <i class="fas fa-truck"></i>
             </a>
+
+          <?php } else { ?>
+
+            <!-- 📄 VER ENTREGA -->
+            <a href="#" class="btn btn-dark btn-sm"
+              onclick="verEntrega(<?php echo $row['id']; ?>)">
+              <i class="fas fa-file-alt"></i>
+            </a>
+
           <?php } ?>
 
         </td>

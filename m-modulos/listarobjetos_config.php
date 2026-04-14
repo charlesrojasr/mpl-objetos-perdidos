@@ -24,7 +24,7 @@ $modulo_edit = "objetos_modal_edit.php";
 // ============================================
 $sql = "SELECT 
     r.id,
-
+    r.estado,
     r.descripcion_objeto,
     c.nombre_categoria,
     r.lugar_referencia,
@@ -66,8 +66,8 @@ $sql = "SELECT
     CASE 
         WHEN r.estado = '1' THEN 'Registrado'
         WHEN r.estado = '2' THEN 'Con Acta'
-        WHEN r.estado = '4' THEN 'Entregado'
-        WHEN r.estado = '5' THEN 'Cerrado'
+        WHEN r.estado = '3' THEN 'Entregado'
+        WHEN r.estado = '4' THEN 'Cerrado'
         ELSE 'Desconocido'
     END AS estado_texto
 

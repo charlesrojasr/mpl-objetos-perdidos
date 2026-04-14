@@ -2,11 +2,11 @@
 <html lang="<?php echo $idiomaM; ?>">
 
 
-<?php 
- $appName = "OBJETOS PERDIDOS"; 
- $appLogoImg = "https://portal.muniplibre.gob.pe/wp-content/uploads/2024/04/image-1.png";
- $userLog = "Municipalidad Distrital de Pueblo Libre";
- $userImgLog = "";
+<?php
+$appName = "OBJETOS PERDIDOS";
+$appLogoImg = "https://portal.muniplibre.gob.pe/wp-content/uploads/2024/04/image-1.png";
+$userLog = "Municipalidad Distrital de Pueblo Libre";
+$userImgLog = "";
 ?>
 
 <head>
@@ -35,20 +35,21 @@
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
 
-    <!-- SweetAlert2 -->
+  <!-- SweetAlert2 -->
   <link rel="stylesheet" href="../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   <!-- Toastr -->
   <link rel="stylesheet" href="../plugins/toastr/toastr.min.css">
 
 
- <!-- DataTables -->
+  <!-- DataTables -->
   <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-  
+
 
 
   <script src="https://kit.fontawesome.com/f13b20fd25.js" crossorigin="anonymous"></script>
-  
+
 </head>
+

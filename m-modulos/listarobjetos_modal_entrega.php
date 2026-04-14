@@ -140,11 +140,7 @@
                                     <label class="font-weight-bold">Evidencias</label>
 
                                     <div class="custom-file">
-                                        <input type="file"
-                                            name="archivos[]"
-                                            class="custom-file-input"
-                                            id="archivos_entrega"
-                                            multiple>
+                                        <input type="file" id="archivos_entrega" name="archivos[]" multiple>
                                         <label class="custom-file-label" for="archivos_entrega">
                                             Seleccionar archivos...
                                         </label>
@@ -164,7 +160,7 @@
 
                         <hr>
 
-                        
+
                     </div>
 
                 </div>
