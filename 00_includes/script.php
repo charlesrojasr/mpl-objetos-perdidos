@@ -43,27 +43,18 @@
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 <script>
-$(function() {
+  $(function() {
 
     // SOLO NÚMEROS
     $(document).on('input', '.only-numbers', function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
+      this.value = this.value.replace(/[^0-9]/g, '');
     });
 
     // MAYÚSCULAS
     $(document).on('input', '.text-uppercase', function() {
-        this.value = this.value.toUpperCase();
+      this.value = this.value.toUpperCase();
     });
 
-});
-</script>
-
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["excel"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
-
 </script>
+
