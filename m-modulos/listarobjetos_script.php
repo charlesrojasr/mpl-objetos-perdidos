@@ -704,3 +704,203 @@
   `);
   });
 </script>
+
+<script>
+  $(document).ready(function() {
+
+    window.timeoutGlobal = null;
+
+    // ================= INPUT DOCUMENTO =================
+    $(document).on('keyup', '#dni_input', function() {
+
+      let input = $(this);
+
+      // 🔥 DETECTA SIEMPRE EL MODAL CORRECTO
+      let modal = input.closest('.modal');
+
+      let doc = input.val();
+      let tipo = modal.find('#tipo_documento').val();
+
+      clearTimeout(window.timeoutGlobal);
+
+      // DNI
+      if (tipo === 'DNI' && doc.length === 8) {
+        window.timeoutGlobal = setTimeout(() => consultarRENIEC(doc, modal), 400);
+        return;
+      }
+
+      // CE
+      if (tipo === 'CE' && doc.length >= 9) {
+        window.timeoutGlobal = setTimeout(() => consultarCE(doc, modal), 400);
+        return;
+      }
+
+      limpiarCampos(modal);
+      bloquearCampos(false, modal);
+
+    });
+
+
+    // ================= CAMBIO TIPO DOC =================
+    $(document).on('change', '#tipo_documento', function() {
+
+      let modal = $(this).closest('.modal');
+
+      modal.find('#dni_input').val('');
+      limpiarCampos(modal);
+      bloquearCampos(false, modal);
+
+    });
+
+
+    // ================= LIMPIAR MODALES =================
+    $(document).on('hidden.bs.modal', '.modal', function() {
+
+      let modal = $(this);
+
+      if (modal.find('form').length) {
+        modal.find('form')[0].reset();
+      }
+
+      limpiarCampos(modal);
+      bloquearCampos(false, modal);
+
+      modal.find('#dni_input').removeClass('is-loading');
+
+    });
+
+  });
+
+
+  // ================= RENIEC =================
+  function consultarRENIEC(dni, modal) {
+
+    modal.find('#dni_input').addClass('is-loading');
+
+    $.ajax({
+      url: 'reniec_consultar.php',
+      type: 'POST',
+      data: {
+        dni: dni
+      },
+      dataType: 'json',
+
+      success: function(res) {
+
+        let data = res.consultarResponse?.return || res.PIDE || res;
+
+        if (data.coResultado === "0000") {
+
+          let p = data.datosPersona;
+
+          modal.find('[name="nombre"]').val(p.prenombres);
+          modal.find('[name="apellido_paterno"]').val(p.apPrimer);
+          modal.find('[name="apellido_materno"]').val(p.apSegundo);
+
+          // 🔥 DIRECCIÓN RENIEC
+          let direccion = '';
+          if (p.ubigeo) direccion += p.ubigeo;
+          if (p.direccion) direccion += (direccion ? ' - ' : '') + p.direccion;
+
+          modal.find('[name="direccion"]').val(direccion);
+
+          bloquearCampos(true, modal);
+
+        } else {
+
+          let mensaje = data.deResultado || "DNI no encontrado en RENIEC";
+
+          alert("RENIEC: " + mensaje);
+
+          limpiarCampos(modal);
+          bloquearCampos(false, modal);
+
+        }
+
+      },
+
+      complete: function() {
+        modal.find('#dni_input').removeClass('is-loading');
+      }
+
+    });
+
+  }
+
+
+  // ================= MIGRACIONES =================
+  function consultarCE(doc, modal) {
+
+    modal.find('#dni_input').addClass('is-loading');
+
+    $.ajax({
+      url: 'migraciones_consultar.php',
+      type: 'POST',
+      data: {
+        doc: doc
+      },
+      dataType: 'json',
+
+      success: function(res) {
+
+        let data = res.jsonObject || res;
+
+        if (data.codRespuesta === "0000") {
+
+          let p = data.datosPersonales;
+
+          modal.find('[name="nombre"]').val(p.nombres);
+          modal.find('[name="apellido_paterno"]').val(p.apepaterno);
+          modal.find('[name="apellido_materno"]').val(p.apematerno);
+
+          // 🔥 DIRECCIÓN MIGRACIONES
+          let direccion = '';
+          if (p.ubiactual) direccion += p.ubiactual;
+          if (p.domactual) direccion += (direccion ? ' - ' : '') + p.domactual;
+
+          modal.find('[name="direccion"]').val(direccion);
+
+          bloquearCampos(true, modal);
+
+        } else {
+
+          let mensaje = data.desRespuesta || "Carné de extranjería no encontrado";
+
+          alert("MIGRACIONES: " + mensaje);
+
+          limpiarCampos(modal);
+          bloquearCampos(false, modal);
+
+        }
+
+      },
+
+      complete: function() {
+        modal.find('#dni_input').removeClass('is-loading');
+      }
+
+    });
+
+  }
+
+
+  // ================= BLOQUEAR =================
+  function bloquearCampos(estado, modal) {
+
+    modal.find('[name="nombre"]').prop('readonly', estado);
+    modal.find('[name="apellido_paterno"]').prop('readonly', estado);
+    modal.find('[name="apellido_materno"]').prop('readonly', estado);
+
+  }
+
+
+  // ================= LIMPIAR =================
+  function limpiarCampos(modal) {
+
+    modal.find('[name="nombre"]').val('');
+    modal.find('[name="apellido_paterno"]').val('');
+    modal.find('[name="apellido_materno"]').val('');
+    modal.find('[name="direccion"]').val('');
+
+  }
+</script>

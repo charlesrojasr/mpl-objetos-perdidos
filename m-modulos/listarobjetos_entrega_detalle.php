@@ -37,7 +37,7 @@ $acta_row = $acta->fetch_assoc();
             <div class="row">
 
                 <div class="col-md-6">
-                    <p><b>DNI:</b> <?php echo $row['nro_documento']; ?></p>
+                    <p><b>NRO DOCUMENTO:</b> <?php echo $row['nro_documento']; ?></p>
                     <p><b>Nombre:</b> <?php echo $row['nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']; ?></p>
                     <p><b>Teléfono:</b> <?php echo $row['numero_contacto']; ?></p>
                 </div>

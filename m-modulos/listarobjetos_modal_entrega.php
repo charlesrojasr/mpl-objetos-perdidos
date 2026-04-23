@@ -21,27 +21,39 @@
 
                     <div class="container-fluid">
 
-                        <!-- INFO -->
-                        <div class="alert alert-light border">
-                            <i class="fas fa-info-circle text-success"></i>
-                            Complete los datos de la persona que recibe el objeto.
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Tipo de Documento</label>
+                                    <select id="tipo_documento" class="form-control">
+                                        <option value="DNI">DNI</option>
+                                        <option value="CE">CARNÉ DE EXTRANJERÍA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <!-- INFO -->
+                                <div class="alert alert-light border">
+                                    <i class="fas fa-info-circle text-success"></i>
+                                    Complete los datos de la persona que recibe el objeto.
+                                </div>
+                            </div>
                         </div>
+
 
                         <div class="row">
 
                             <!-- DNI -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="font-weight-bold">DNI</label>
+                                    <label class="font-weight-bold">NRO DE DOCUMENTO</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-success">
                                                 <i class="fas fa-id-card text-white"></i>
                                             </span>
                                         </div>
-                                        <input type="text" name="nro_documento"
-                                            class="form-control only-numbers"
-                                            placeholder="Ej: 12345678" required>
+                                        <input type="text" id="dni_input" name="nro_documento" class="form-control only-numbers">
                                     </div>
                                 </div>
                             </div>

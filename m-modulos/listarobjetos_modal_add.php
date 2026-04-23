@@ -37,8 +37,16 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label>Tipo de Documento</label>
+                                        <select id="tipo_documento" class="form-control">
+                                            <option value="DNI">DNI</option>
+                                            <option value="CE">CARNÉ DE EXTRANJERÍA</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label>Documento de Identidad</label>
-                                        <input type="text" name="nro_documento" class="form-control only-numbers datos-persona" pattern="[0-9]+" inputmode="numeric" required>
+                                        <input type="text" id="dni_input" name="nro_documento" class="form-control only-numbers datos-persona" maxlength="12">
                                     </div>
 
                                     <div class="form-group">

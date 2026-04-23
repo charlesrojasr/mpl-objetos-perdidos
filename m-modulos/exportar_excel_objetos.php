@@ -80,7 +80,7 @@ $data[] = [
  'ID','Estado','Objeto','Categoría','Lugar Referencia',
  'Persona Registro','Tipo Persona','Fecha Registro',
  'Acta Recepción','Fecha Acta',
- 'Persona Entrega','DNI','Correo','Teléfono','Dirección',
+ 'Persona Entrega','NRO DOCUMENTO','Correo','Teléfono','Dirección',
  'Fecha Entrega','Usuario Entrega',
  'Acta Entrega','Fecha Acta Entrega'
 ];
