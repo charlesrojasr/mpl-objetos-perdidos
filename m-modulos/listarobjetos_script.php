@@ -1,47 +1,4 @@
 <script>
-  $(function() {
-    $("#example1").DataTable({
-      "responsive": true,
-      "lengthChange": false,
-      "autoWidth": false,
-      "buttons": [{
-        text: 'Excel',
-        className: 'btn btn-success',
-        action: function(e, dt, node, config) {
-
-          // 🔥 obtener filas filtradas
-          let data = dt.rows({
-            search: 'applied'
-          }).data();
-
-          let ids = [];
-
-          data.each(function(row) {
-            ids.push(row[0]); // columna 0 = ID
-          });
-
-          if (ids.length === 0) {
-            alert("No hay datos para exportar");
-            return;
-          }
-
-          // 🔥 enviar al PHP
-          let form = $('<form method="POST" action="exportar_excel_objetos.php"></form>');
-
-          form.append(`<input type="hidden" name="ids" value="${ids.join(',')}">`);
-
-          $('body').append(form);
-          form.submit();
-        }
-      }],
-      "order": [
-        [0, "desc"]
-      ] // 🔥 SOLUCIÓN
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  });
-</script>
-
-<script>
   // ================= EDITAR =================
   function funcionEditar(id) {
 
@@ -901,6 +858,48 @@
     modal.find('[name="apellido_paterno"]').val('');
     modal.find('[name="apellido_materno"]').val('');
     modal.find('[name="direccion"]').val('');
+
+  }
+</script>
+
+<script>
+  function buscar() {
+
+    $.post('listarobjetos_buscar.php', $('#formFiltros').serialize(), function(html) {
+
+      $('#contenedorTabla').html(html).show();
+
+      // 🔥 REINICIAR DATATABLE
+      $("#example1").DataTable({
+        destroy: true,
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ["excel"],
+        order: [
+          [0, "desc"]
+        ]
+      });
+
+    });
+
+  }
+
+  function limpiarFiltros() {
+
+    // 🔥 resetear formulario
+    $('#formFiltros')[0].reset();
+
+    // 🔥 limpiar tabla
+    $('#contenedorTabla').html('').hide();
+
+  }
+
+  function exportarExcel() {
+
+    let datos = $('#formFiltros').serialize();
+
+    window.open('exportar_excel_objetos.php?' + datos, '_blank');
 
   }
 </script>
