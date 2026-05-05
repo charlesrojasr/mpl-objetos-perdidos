@@ -107,13 +107,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // =============================
         echo "<script>
             alert('Registro guardado correctamente');
-            window.location.href='listarobjetos.php';
+            window.location.href = document.referrer;
         </script>";
     } else {
 
         echo "<script>
             alert('Error al guardar el registro');
-            window.location.href='listarobjetos.php';
+            window.location.href = document.referrer;
         </script>";
     }
 } else {

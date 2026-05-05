@@ -51,5 +51,38 @@ $userImgLog = "";
 
   <script src="https://kit.fontawesome.com/f13b20fd25.js" crossorigin="anonymous"></script>
 
-</head>
+  <style>
+    .switch-estado {
+      width: 50px;
+      height: 25px;
+      appearance: none;
+      background: #dc3545;
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+      transition: 0.3s;
+      outline: none;
+    }
 
+    .switch-estado:checked {
+      background: #28a745;
+    }
+
+    .switch-estado::before {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: white;
+      position: absolute;
+      top: 2.5px;
+      left: 3px;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .switch-estado:checked::before {
+      transform: translateX(25px);
+    }
+  </style>
+
+</head>

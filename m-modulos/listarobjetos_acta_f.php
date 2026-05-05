@@ -71,7 +71,8 @@ if ($conn->query($sql)) {
               WHERE id = '$registro_id' AND estado = '1'");
 
     echo "<script>
-        window.location.href = 'listarobjetos.php?ok=1';
+        alert('Acta guardada correctamente');
+        window.location.href = document.referrer;
     </script>";
 } else {
 

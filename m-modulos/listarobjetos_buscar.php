@@ -6,55 +6,55 @@ $where = "WHERE 1=1";
 // 🔥 FILTROS DINÁMICOS
 
 if ($_POST['estado'] != '')
-    $where .= " AND r.estado = '{$_POST['estado']}'";
+  $where .= " AND r.estado = '{$_POST['estado']}'";
 
 if ($_POST['objeto'] != '')
-    $where .= " AND r.descripcion_objeto LIKE '%{$_POST['objeto']}%'";
+  $where .= " AND r.descripcion_objeto LIKE '%{$_POST['objeto']}%'";
 
 if ($_POST['categoria_id'] != '')
-    $where .= " AND r.categoria_id = '{$_POST['categoria_id']}'";
+  $where .= " AND r.categoria_id = '{$_POST['categoria_id']}'";
 
 if (!empty($_POST['documento_persona_registro']))
   $where .= " AND r.nro_documento LIKE '%{$_POST['documento_persona_registro']}%'";
 
 if ($_POST['persona_registro'] != '')
-    $where .= " AND CONCAT(r.nombre,' ',r.apellido_paterno,' ',r.apellido_materno) LIKE '%{$_POST['persona_registro']}%'";
+  $where .= " AND CONCAT(r.nombre,' ',r.apellido_paterno,' ',r.apellido_materno) LIKE '%{$_POST['persona_registro']}%'";
 
 if ($_POST['tipo_persona'] != '')
-    $where .= " AND r.tipo_persona = '{$_POST['tipo_persona']}'";
+  $where .= " AND r.tipo_persona = '{$_POST['tipo_persona']}'";
 
 if ($_POST['user_registro'] != '')
-    $where .= " AND r.user_id = '{$_POST['user_registro']}'";
+  $where .= " AND r.user_id = '{$_POST['user_registro']}'";
 
 if ($_POST['fecha_ini'] != '')
-    $where .= " AND DATE(r.fecha_registro) >= '{$_POST['fecha_ini']}'";
+  $where .= " AND DATE(r.fecha_registro) >= '{$_POST['fecha_ini']}'";
 
 if ($_POST['fecha_fin'] != '')
-    $where .= " AND DATE(r.fecha_registro) <= '{$_POST['fecha_fin']}'";
+  $where .= " AND DATE(r.fecha_registro) <= '{$_POST['fecha_fin']}'";
 
 if ($_POST['acta_recepcion'] != '')
-    $where .= " AND a.nombre_acta LIKE '%{$_POST['acta_recepcion']}%'";
+  $where .= " AND a.nombre_acta LIKE '%{$_POST['acta_recepcion']}%'";
 
 if ($_POST['persona_entrega'] != '')
-    $where .= " AND CONCAT(e.nombre,' ',e.apellido_paterno,' ',e.apellido_materno) LIKE '%{$_POST['persona_entrega']}%'";
+  $where .= " AND CONCAT(e.nombre,' ',e.apellido_paterno,' ',e.apellido_materno) LIKE '%{$_POST['persona_entrega']}%'";
 
 if ($_POST['dni_entrega'] != '')
-    $where .= " AND e.nro_documento LIKE '%{$_POST['dni_entrega']}%'";
+  $where .= " AND e.nro_documento LIKE '%{$_POST['dni_entrega']}%'";
 
 if ($_POST['fecha_entrega_ini'] != '')
-    $where .= " AND DATE(e.fecha_entrega) >= '{$_POST['fecha_entrega_ini']}'";
+  $where .= " AND DATE(e.fecha_entrega) >= '{$_POST['fecha_entrega_ini']}'";
 
 if ($_POST['fecha_entrega_fin'] != '')
-    $where .= " AND DATE(e.fecha_entrega) <= '{$_POST['fecha_entrega_fin']}'";
+  $where .= " AND DATE(e.fecha_entrega) <= '{$_POST['fecha_entrega_fin']}'";
 
 if ($_POST['user_entrega'] != '')
-    $where .= " AND e.user_id = '{$_POST['user_entrega']}'";
+  $where .= " AND e.user_id = '{$_POST['user_entrega']}'";
 
 if ($_POST['acta_entrega'] != '')
-    $where .= " AND ae.nombre_acta LIKE '%{$_POST['acta_entrega']}%'";
+  $where .= " AND ae.nombre_acta LIKE '%{$_POST['acta_entrega']}%'";
 
 // 🔥 TU QUERY BASE + WHERE
-$sql = "SELECT r.id,
+$sql = "SELECT r.id, r.estado,
     CASE 
         WHEN r.estado = '1' THEN 'Registrado'
         WHEN r.estado = '2' THEN 'Con Acta'
@@ -102,7 +102,7 @@ ORDER BY r.id DESC";
 $result = $conn->query($sql);
 
 if (!$result) {
-    die("Error SQL: " . $conn->error);
+  die("Error SQL: " . $conn->error);
 }
 ?>
 
@@ -161,10 +161,14 @@ if (!$result) {
 
         <td>
 
-          <a href="#" class="btn btn-warning btn-sm"
-            onclick="funcionEditar(<?= $row['id'] ?>)">
-            <i class="fas fa-edit"></i>
-          </a>
+          <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+
+            <a href="#" class="btn btn-warning btn-sm"
+              onclick="funcionEditar(<?= $row['id'] ?>)">
+              <i class="fas fa-edit"></i>
+            </a>
+
+          <?php } ?>
 
           <a href="#" class="btn btn-info btn-sm"
             onclick="verDetalle(<?= $row['id'] ?>)">
@@ -195,5 +199,3 @@ if (!$result) {
 
   </tbody>
 </table>
-
-

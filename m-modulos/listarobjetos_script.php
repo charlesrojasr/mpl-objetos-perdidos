@@ -865,25 +865,34 @@
 <script>
   function buscar() {
 
-    $.post('listarobjetos_buscar.php', $('#formFiltros').serialize(), function(html) {
+    let datos = $('#formFiltros').serialize();
+
+    // 🔥 GUARDAR FILTROS EN URL
+    window.history.replaceState(null, null, '?' + datos);
+
+    $.post('listarobjetos_buscar.php', datos, function(html) {
 
       $('#contenedorTabla').html(html).show();
 
-      // 🔥 REINICIAR DATATABLE
+      if ($.fn.DataTable.isDataTable('#example1')) {
+        $('#example1').DataTable().destroy();
+      }
+
       $("#example1").DataTable({
         destroy: true,
-        responsive: true,
         lengthChange: false,
         autoWidth: false,
         buttons: ["excel"],
         order: [
           [0, "desc"]
-        ]
+        ],
+        responsive: true
       });
 
     });
 
   }
+
 
   function limpiarFiltros() {
 
@@ -902,4 +911,18 @@
     window.open('exportar_excel_objetos.php?' + datos, '_blank');
 
   }
+
+  $(document).ready(function() {
+
+    let params = new URLSearchParams(window.location.search);
+
+    params.forEach((value, key) => {
+      $('[name="' + key + '"]').val(value);
+    });
+
+    if (params.toString() !== '') {
+      buscar(); // 🔥 aplica filtros automáticamente
+    }
+
+  });
 </script>
