@@ -10,9 +10,11 @@ $username = $_POST['username'];
 // 🔥 CONTRASEÑA = DOCUMENTO
 $hashed_password = password_hash($doc, PASSWORD_DEFAULT);
 
+$role_id = $_POST['role_id'];
+
 // INSERT USERS
-$stmt = $conn->prepare("INSERT INTO objetosperdidos_users (username, password, role_id, estado) VALUES (?, ?, 2, 1)");
-$stmt->bind_param("ss", $username, $hashed_password);
+$stmt = $conn->prepare("INSERT INTO objetosperdidos_users (username, password, role_id, estado) VALUES (?, ?, ?, 1)");
+$stmt->bind_param("ssi", $username, $hashed_password, $role_id);
 
 if($stmt->execute()){
 

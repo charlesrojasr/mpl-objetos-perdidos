@@ -32,8 +32,8 @@ include 'usuarios_config.php';
             data-id="<?= $row['id'] ?>"
             <?= $row['estado'] == 1 ? 'checked' : '' ?>>
         </td>
-        <td><?= date('Y-m-d H:i:s', strtotime($row['created_at'] . ' -1 hour')) ?></td>
-        <td><?= date('Y-m-d H:i:s', strtotime($row['updated_at'] . ' -1 hour')) ?></td>
+        <td><?= date('Y-m-d', strtotime($row['created_at'] . ' -1 hour')) ?></td>
+        <td><?= date('Y-m-d', strtotime($row['updated_at'] . ' -1 hour')) ?></td>
       </tr>
 
     <?php } ?>
