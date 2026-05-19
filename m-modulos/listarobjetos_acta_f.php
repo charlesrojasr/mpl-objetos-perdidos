@@ -2,7 +2,6 @@
 include 'listarobjetos_config.php';
 
 $registro_id = $_POST['registro_id'];
-$nombre_acta = strtoupper($_POST['nombre_acta']);
 
 $archivo = "";
 
@@ -37,29 +36,61 @@ $existe = $check->fetch_assoc();
 
 if ($existe) {
 
+    // 🔥 CONSERVAR NOMBRE ORIGINAL
+    $nombre_acta = $existe['nombre_acta'];
+
     // 👉 ELIMINAR ARCHIVO ANTERIOR SI SUBE NUEVO
     if ($archivo != "" && !empty($existe['nombre_archivo'])) {
+
         $ruta_anterior = "../dist/actas/" . $existe['nombre_archivo'];
+
         if (file_exists($ruta_anterior)) {
             unlink($ruta_anterior);
         }
     }
 
-    // UPDATE
+    // ================= UPDATE =================
     if ($archivo != "") {
+
         $sql = "UPDATE objetosperdidos_actas 
-                SET nombre_acta='$nombre_acta', nombre_archivo='$archivo'
+                SET nombre_acta='$nombre_acta',
+                    nombre_archivo='$archivo'
                 WHERE registro_id='$registro_id'";
+
     } else {
+
         $sql = "UPDATE objetosperdidos_actas 
                 SET nombre_acta='$nombre_acta'
                 WHERE registro_id='$registro_id'";
     }
+
 } else {
 
-    // INSERT
-    $sql = "INSERT INTO objetosperdidos_actas (registro_id, nombre_acta, nombre_archivo)
-            VALUES ('$registro_id', '$nombre_acta', '$archivo')";
+    // 🔥 GENERAR CORRELATIVO SOLO SI ES NUEVO
+    $year = date('Y');
+
+    $sqlCorrelativo = "SELECT COUNT(*) + 1 AS correlativo
+    FROM objetosperdidos_actas
+    WHERE YEAR(fecha_subida) = '$year'
+    ";
+
+    $resCorrelativo = $conn->query($sqlCorrelativo);
+
+    if (!$resCorrelativo) {
+        die("Error SQL correlativo: " . $conn->error);
+    }
+
+    $rowCorrelativo = $resCorrelativo->fetch_assoc();
+
+    $numero = str_pad($rowCorrelativo['correlativo'], 4, "0", STR_PAD_LEFT);
+
+    $nombre_acta = "ACTA DE RECEPCION - Nº {$numero} - {$year} - MPL-GCSC-CAPL";
+
+    // ================= INSERT =================
+    $sql = "INSERT INTO objetosperdidos_actas
+            (registro_id, nombre_acta, nombre_archivo)
+            VALUES
+            ('$registro_id', '$nombre_acta', '$archivo')";
 }
 
 // ================= EJECUTAR =================
@@ -67,13 +98,15 @@ if ($conn->query($sql)) {
 
     // ACTUALIZAR ESTADO
     $conn->query("UPDATE objetosperdidos_registros 
-              SET estado = '2' 
-              WHERE id = '$registro_id' AND estado = '1'");
+                  SET estado = '2' 
+                  WHERE id = '$registro_id' 
+                  AND estado = '1'");
 
     echo "<script>
         alert('Acta guardada correctamente');
         window.location.href = document.referrer;
     </script>";
+
 } else {
 
     echo "<script>
@@ -81,3 +114,4 @@ if ($conn->query($sql)) {
         window.history.back();
     </script>";
 }
+?>

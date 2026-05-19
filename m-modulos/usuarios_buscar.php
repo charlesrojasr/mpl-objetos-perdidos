@@ -13,6 +13,7 @@ include 'usuarios_config.php';
       <th>Estado</th>
       <th>Creado</th>
       <th>Actualizado</th>
+      <th>Reset</th>
     </tr>
   </thead>
 
@@ -34,6 +35,15 @@ include 'usuarios_config.php';
         </td>
         <td><?= date('Y-m-d', strtotime($row['created_at'] . ' -1 hour')) ?></td>
         <td><?= date('Y-m-d', strtotime($row['updated_at'] . ' -1 hour')) ?></td>
+        
+        <td class="text-center">
+          <button
+            class="btn btn-warning btn-sm btn-reset-clave"
+            data-id="<?= $row['id'] ?>"
+            data-doc="<?= $row['documento_identidad'] ?>">
+            <i class="fas fa-key"></i>
+          </button>
+        </td>
       </tr>
 
     <?php } ?>

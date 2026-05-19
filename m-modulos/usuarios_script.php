@@ -318,3 +318,38 @@
 
   });
 </script>
+
+<script>
+  $(document).off('click', '.btn-reset-clave')
+    .on('click', '.btn-reset-clave', function() {
+
+      let id = $(this).data('id');
+      let doc = $(this).data('doc');
+
+      if (!confirm(
+          "¿Seguro que desea resetear su clave?\n\nLa nueva clave será su número de documento."
+        )) {
+        return;
+      }
+
+      $.post('usuarios_reset_password.php', {
+        id: id,
+        doc: doc
+      }, function(res) {
+
+        let r = JSON.parse(res);
+
+        if (r.status) {
+
+          alert("Clave reseteada correctamente");
+
+        } else {
+
+          alert(r.msg);
+
+        }
+
+      });
+
+    });
+</script>

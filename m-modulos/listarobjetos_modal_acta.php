@@ -40,8 +40,8 @@
                 <input type="text"
                   name="nombre_acta"
                   id="nombre_acta"
-                  class="form-control text-uppercase"
-                  placeholder="Ej: ACTA DE ENTREGA N° 001"
+                  class="form-control"
+                  readonly
                   required>
               </div>
             </div>
@@ -89,4 +89,3 @@
     </div>
   </div>
 </div>
-

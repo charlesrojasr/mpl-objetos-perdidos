@@ -20,8 +20,13 @@
           <!-- NOMBRE -->
           <div class="form-group">
             <label>Nombre del Acta</label>
-            <input type="text" name="nombre_acta" id="acta_nombre"
-              class="form-control text-uppercase" required>
+
+            <input type="text"
+              name="nombre_acta"
+              id="acta_nombre"
+              class="form-control"
+              readonly
+              style="font-weight:bold; background:#f4f6f9;">
           </div>
 
           <!-- ARCHIVO -->

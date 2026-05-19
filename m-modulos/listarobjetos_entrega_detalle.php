@@ -169,6 +169,30 @@ $acta_row = $acta->fetch_assoc();
 
         <div class="card-body text-center">
 
+            <!-- 🔥 DESCARGA MODELO -->
+            <div class="callout callout-info">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <i class="fas fa-file-word mr-1"></i>
+                        <b>Descarga el modelo de Acta de Entrega</b>
+                    </div>
+
+                    <a href="../recursos/modelos_actas/MODELO ACTA DE ENTREGA.docx"
+                        class="btn btn-info btn-sm"
+                        download
+                        style="font-weight:bold; color:white !important;">
+
+                        <i class="fas fa-download text-white"></i> Descargar
+                    </a>
+
+                </div>
+
+            </div>
+
+            <hr>
+
             <?php if ($acta_row) { ?>
 
                 <!-- NOMBRE DEL ACTA -->

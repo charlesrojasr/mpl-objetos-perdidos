@@ -124,20 +124,53 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
 
     <!-- ================= ACTA DE REGISTRO ================= -->
     <div class="card mt-3">
-        <div class="card-header bg-dark"><b>ACTA DE REGISTRO</b></div>
+
+        <div class="card-header bg-dark">
+            <b>ACTA DE RECEPCIÓN</b>
+        </div>
+
         <div class="card-body">
+
+            <!-- 🔥 DESCARGA MODELO -->
+            <div class="callout callout-info">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <i class="fas fa-file-word mr-1"></i>
+                        <b>Descarga el modelo de Acta de Recepción</b>
+                    </div>
+
+                    <a href="../recursos/modelos_actas/MODELO ACTA DE RECEPCION.docx"
+                        class="btn btn-info btn-sm"
+                        download
+                        style="font-weight:bold; color:white !important;">
+
+                        <i class="fas fa-download text-white"></i> Descargar
+                    </a>
+
+                </div>
+
+            </div>
+
+            <hr>
 
             <?php if ($acta_row) { ?>
 
-                <p><b><?php echo $acta_row['nombre_acta']; ?></b></p>
+                <p>
+                    <b><?php echo $acta_row['nombre_acta']; ?></b>
+                </p>
 
                 <a href="../dist/actas/<?php echo $acta_row['nombre_archivo']; ?>"
-                    target="_blank" class="btn btn-info btn-sm">
+                    target="_blank"
+                    class="btn btn-info btn-sm">
+
                     <i class="fas fa-file"></i> Ver Acta
                 </a>
 
                 <button class="btn btn-warning btn-sm"
                     onclick="abrirActaEditar(<?php echo $row['id']; ?>)">
+
                     <i class="fas fa-edit"></i> Editar Acta
                 </button>
 
@@ -145,12 +178,14 @@ $fecha = date("Y-m-d H:i:s", strtotime($row['fecha_registro'] . " -1 hour"));
 
                 <button class="btn btn-dark btn-sm"
                     onclick="abrirActa(<?php echo $row['id']; ?>)">
+
                     <i class="fas fa-file-upload"></i> Subir Acta
                 </button>
 
             <?php } ?>
 
         </div>
+
     </div>
 
 </div>

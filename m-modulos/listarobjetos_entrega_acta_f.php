@@ -15,7 +15,7 @@ function limpiar($conn, $texto)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $entrega_id = $_POST['entrega_id'];
-    $nombre_acta = limpiar($conn, $_POST['nombre_acta']);
+    $nombre_acta = "";
 
     $archivo = "";
 
@@ -48,6 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($existe) {
 
+        // 🔥 conservar nombre original
+        $nombre_acta = $existe['nombre_acta'];
+
         // 🔥 ELIMINAR ARCHIVO ANTERIOR SI SUBE NUEVO
         if ($archivo != "" && !empty($existe['nombre_archivo'])) {
 
@@ -74,10 +77,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
 
+        // ================= CORRELATIVO =================
+        $year = date('Y');
+
+        $sqlCorrelativo = "SELECT COUNT(*) + 1 AS correlativo
+        FROM objetosperdidos_entrega_actas
+        WHERE YEAR(fecha_subida) = '$year'
+        ";
+
+        $resCorrelativo = $conn->query($sqlCorrelativo);
+
+        if (!$resCorrelativo) {
+            die("Error SQL correlativo: " . $conn->error);
+        }
+
+        $rowCorrelativo = $resCorrelativo->fetch_assoc();
+
+        $numero = str_pad($rowCorrelativo['correlativo'], 4, "0", STR_PAD_LEFT);
+
+        // 🔥 nombre final
+        $nombre_acta = "ACTA DE ENTREGA - Nº {$numero} - {$year} - MPL-GCSC-CAPL";
+
         // ================= INSERT =================
         $sql = "INSERT INTO objetosperdidos_entrega_actas 
-                (entrega_id, nombre_acta, nombre_archivo, fecha_subida)
-                VALUES ('$entrega_id', '$nombre_acta', '$archivo', NOW())";
+            (entrega_id, nombre_acta, nombre_archivo, fecha_subida)
+            VALUES 
+            ('$entrega_id', '$nombre_acta', '$archivo', NOW())";
     }
 
     // ================= EJECUTAR =================

@@ -247,18 +247,29 @@
 <script>
   function abrirActa(id) {
 
+    limpiarModalActa();
+
     $('#acta_registro_id').val(id);
 
     $('#modal_detalle').modal('hide');
 
-    $('#modal_detalle').one('hidden.bs.modal', function() {
+    $.post('listarobjetos_acta_correlativo.php', function(res) {
 
-      $('#modal_acta_registro').modal({
-        backdrop: 'static',
-        keyboard: false
+      let r = JSON.parse(res);
+
+      $('#nombre_acta').val(r.nombre);
+
+      $('#modal_detalle').one('hidden.bs.modal', function() {
+
+        $('#modal_acta_registro').modal({
+          backdrop: 'static',
+          keyboard: false
+        });
+
       });
 
     });
+
   }
 
   function abrirActaEditar(id) {
@@ -269,6 +280,7 @@
     // LIMPIAR
     $('#acta_registro_id').val('');
     $('#nombre_acta').val('');
+    $('#nombre_acta').prop('readonly', true);
     $('#archivo_acta').val('');
     $('#preview_acta_actual').html('');
     $('.custom-file-label').text('Seleccionar archivo...');
@@ -615,7 +627,7 @@
 <script>
   function abrirModalActaEntrega(entrega_id) {
 
-    // LIMPIAR TODO
+    // LIMPIAR
     $('#acta_entrega_id').val('');
     $('#acta_nombre').val('');
     $('#input_acta_entrega_modal').val('');
@@ -629,19 +641,32 @@
 
       let r = JSON.parse(res);
 
+      // 🔥 SI YA EXISTE
       if (r && r.nombre_archivo) {
 
         $('#acta_nombre').val(r.nombre_acta);
 
-        // 🔥 MISMO CONTENEDOR SIEMPRE
         $('#preview_acta_modal').html(`
         <iframe src="../dist/actas_entrega/${r.nombre_archivo}" 
                 width="100%" height="300"></iframe>
       `);
 
-      }
+        $('#modal_acta_entrega').modal('show');
 
-      $('#modal_acta_entrega').modal('show');
+      } else {
+
+        // 🔥 GENERAR CORRELATIVO
+        $.get('listarobjetos_entrega_acta_correlativo.php', function(resp) {
+
+          let data = JSON.parse(resp);
+
+          $('#acta_nombre').val(data.nombre_acta);
+
+          $('#modal_acta_entrega').modal('show');
+
+        });
+
+      }
 
     });
 
